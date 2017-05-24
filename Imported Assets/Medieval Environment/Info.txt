@@ -1,0 +1,5 @@
+If you have a problem with terrain shader:
+Usually you have to press Play [>] to load textures
+If it doesn't help just delete folder: "TriPlanarTerrain" form project to restore default terrain settings. 
+
+more info: ratsllik@gmail.com

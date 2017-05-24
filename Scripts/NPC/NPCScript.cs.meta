@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 706f560ea549f0b4cb810543249fec2f
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - ragdoll: {fileID: 100090, guid: 3d2c2a69c64cc754fabc67aa4d3331f6, type: 2}
+  executionOrder: 550
+  icon: {instanceID: 0}
+  userData: 

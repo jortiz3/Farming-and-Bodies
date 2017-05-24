@@ -1,0 +1,212 @@
+fileFormatVersion: 2
+guid: 226b94d29e83af74eb929e2b25751ba0
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: Base HumanLCalf
+    100002: Base HumanTail1
+    100004: Base HumanNeck
+    100006: bon_gob_war_jaw
+    100008: Base HumanTail3
+    100010: //RootNode
+    100012: Base HumanHead
+    100014: Base HumanTail2
+    100016: Base HumanLUpperarm
+    100018: Base HumanRibcage
+    100020: Base HumanLCollarbone
+    100022: Base HumanLForearm
+    100024: Base HumanLDigit32
+    100026: Base HumanLDigit33
+    100028: Base HumanLDigit41
+    100030: Base HumanLDigit42
+    100032: Base HumanLDigit43
+    100034: Base HumanLDigit51
+    100036: Base HumanLDigit52
+    100038: Base HumanLDigit53
+    100040: Base HumanRCollarbone
+    100042: Base HumanRUpperarm
+    100044: Base HumanRForearm
+    100046: Base HumanRDigit11 1
+    100048: Base HumanRDigit12
+    100050: Base HumanRDigit13
+    100052: Base HumanRDigit21
+    100054: Base HumanLDigit31
+    100056: Base HumanLDigit22
+    100058: Base HumanRDigit23
+    100060: Base HumanRDigit42
+    100062: Base HumanRDigit43
+    100064: Base HumanRDigit51
+    100066: Base HumanRDigit52
+    100068: Base HumanRDigit53
+    100070: bon_gob_war_face
+    100072: Base HumanRDigit41
+    100074: Base HumanRDigit32
+    100076: Base HumanLDigit21
+    100078: Base HumanLDigit11 1
+    100080: Base HumanLDigit12
+    100082: Base HumanLDigit13
+    100084: Base HumanRDigit22
+    100086: Base HumanLDigit23
+    100088: Base HumanRDigit33
+    100090: Base HumanRDigit31
+    100092: Base HumanSpine3
+    100094: Base HumanSpine2
+    100096: Base HumanSpine1
+    100098: Base HumanRDigit11
+    100100: Base HumanRThigh
+    100102: Base HumanLDigit11
+    100104: Base HumanLThigh
+    100106: villager_male_strong_body
+    100108: Base HumanRPalm
+    100110: Base HumanLPalm
+    100112: Base HumanRFoot
+    100114: Base HumanRCalf
+    100116: Base HumanLFoot
+    100118: Base HumanPelvis
+    400000: Base HumanLCalf
+    400002: Base HumanTail1
+    400004: Base HumanNeck
+    400006: bon_gob_war_jaw
+    400008: Base HumanTail3
+    400010: //RootNode
+    400012: Base HumanHead
+    400014: Base HumanTail2
+    400016: Base HumanLUpperarm
+    400018: Base HumanRibcage
+    400020: Base HumanLCollarbone
+    400022: Base HumanLForearm
+    400024: Base HumanLDigit32
+    400026: Base HumanLDigit33
+    400028: Base HumanLDigit41
+    400030: Base HumanLDigit42
+    400032: Base HumanLDigit43
+    400034: Base HumanLDigit51
+    400036: Base HumanLDigit52
+    400038: Base HumanLDigit53
+    400040: Base HumanRCollarbone
+    400042: Base HumanRUpperarm
+    400044: Base HumanRForearm
+    400046: Base HumanRDigit11 1
+    400048: Base HumanRDigit12
+    400050: Base HumanRDigit13
+    400052: Base HumanRDigit21
+    400054: Base HumanLDigit31
+    400056: Base HumanLDigit22
+    400058: Base HumanRDigit23
+    400060: Base HumanRDigit42
+    400062: Base HumanRDigit43
+    400064: Base HumanRDigit51
+    400066: Base HumanRDigit52
+    400068: Base HumanRDigit53
+    400070: bon_gob_war_face
+    400072: Base HumanRDigit41
+    400074: Base HumanRDigit32
+    400076: Base HumanLDigit21
+    400078: Base HumanLDigit11 1
+    400080: Base HumanLDigit12
+    400082: Base HumanLDigit13
+    400084: Base HumanRDigit22
+    400086: Base HumanLDigit23
+    400088: Base HumanRDigit33
+    400090: Base HumanRDigit31
+    400092: Base HumanSpine3
+    400094: Base HumanSpine2
+    400096: Base HumanSpine1
+    400098: Base HumanRDigit11
+    400100: Base HumanRThigh
+    400102: Base HumanLDigit11
+    400104: Base HumanLThigh
+    400106: villager_male_strong_body
+    400108: Base HumanRPalm
+    400110: Base HumanLPalm
+    400112: Base HumanRFoot
+    400114: Base HumanRCalf
+    400116: Base HumanLFoot
+    400118: Base HumanPelvis
+    4300000: villager_male_skn_body
+    4300002: villager_male_strong_body
+    7400000: Take 001
+    7400002: run
+    11100000: //RootNode
+    13700000: Base HumanPelvis
+    13700002: villager_male_strong_body
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: run
+      takeName: 
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 1
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 0
+  userData: 
