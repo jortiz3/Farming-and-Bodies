@@ -9,6 +9,13 @@ public class MenuScript : MonoBehaviour {
 	public string currentState = "";
 	[HideInInspector]
 	public string complimentaryState = "";
+
+	[Tooltip("Only hidden when a focus menu is displayed.")]
+	public string[] overlays;
+
+	[Tooltip("No overlays may be displayed when one of these menus are displayed.")]
+	public string[] focusMenus;
+
 	public SaveLoadScript saveLoadObject;
 
 	[HideInInspector]
@@ -77,10 +84,12 @@ public class MenuScript : MonoBehaviour {
 	}
 
 	public void DisplayCurrentItemSlotInfo(GameObject infoObj) {
-		infoObj.SetActive (true);
 		Item temp = global.playerInventory.GetItem(InventoryScript.CurrentInvSlot);
-		infoObj.transform.Find ("Text").GetComponent<Text>().text = temp.name + "\nVal: " + temp.value + "\nQty: " + temp.quantity;
-		infoObj.transform.position = InventoryScript.CurrentInvSlot.transform.position;
+		if (temp != null) {
+			infoObj.SetActive (true);
+			infoObj.transform.Find ("Text").GetComponent<Text>().text = temp.name + "\nVal: " + temp.value + "\nQty: " + temp.quantity;
+			infoObj.transform.position = InventoryScript.CurrentInvSlot.transform.position;
+		}
 	}
 
 	public void UseCurrentItemSlot(GameObject clickPanel) {
@@ -112,17 +121,37 @@ public class MenuScript : MonoBehaviour {
 		else
 			currentState = state;
 
+		bool currStateIsFocus = false;
+
+		for (int f = 0; f < focusMenus.Length; f++) {
+			if (currentState.Equals(focusMenus[f])) {
+				currStateIsFocus = true;
+				break;
+			}
+		}
+
+		string currGroupName = "";
+		bool currGroupIsOverlay;
 		for (int i = 0; i < groups.Length; i++) {
 			if (groups[i] != null) {
-				if (groups[i].transform.name.Equals(currentState)) {
+				currGroupName = groups[i].transform.name;
+
+				currGroupIsOverlay = false;
+				for (int o = 0; o < overlays.Length; o++) {
+					if (currGroupName.Equals(overlays[o])) {
+						currGroupIsOverlay = true;
+						break;
+					}
+				}
+
+				if (currGroupName.Equals(currentState) || (!currStateIsFocus && currGroupIsOverlay)) {
 					groups[i].alpha = 1;
 					groups[i].interactable = true;
 					groups[i].blocksRaycasts = true;
 
 					if (groups[i].GetComponent<MenuScript>() != null)
 						groups[i].GetComponent<MenuScript>().RefreshState();
-				}
-				else {
+				} else {
 					groups[i].alpha = 0;
 					groups[i].interactable = false;
 					groups[i].blocksRaycasts = false;

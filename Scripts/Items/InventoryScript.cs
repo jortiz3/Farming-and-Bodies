@@ -6,12 +6,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 
+//create blank item
+//do not allow click panel on blank item
+//add item fills in empty slot
+//	--array instead of list? list for chests/containers?
+
 public class InventoryScript : MonoBehaviour 
 {
-	//prefab for ui item slot
-	public static GameObject UISlotTemplate;
-	//the parent for the new ui stuff per item
-	public static Transform UISlotParent;
+	//the parent for hotkey bar
+	public static Transform hotkeyBarParent;
 	//the transform for the right click menu
 	public static GameObject UIClickPanel;
 
@@ -24,9 +27,7 @@ public class InventoryScript : MonoBehaviour
 
 	public void Initialize () 
 	{
-		UISlotParent = GameObject.FindGameObjectWithTag("InvUIParent").transform;
-		UISlotTemplate = GameObject.FindGameObjectWithTag("InvUITemplate");
-		UISlotTemplate.SetActive(false);
+		hotkeyBarParent = GameObject.FindGameObjectWithTag("InvUIParent").transform;
 
 		UIClickPanel = GameObject.FindGameObjectWithTag("InvUIClickPanel");
 		UIClickPanel.SetActive (false);
@@ -48,7 +49,7 @@ public class InventoryScript : MonoBehaviour
 
 	public void UpdateUIInfoString()
 	{
-		string tempString = "Item Count: " + items.Count + "/" + maxNumOfItems + "\nMoney: " + money;
+		string tempString = "Monies: " + money;
 		GameObject.Find("Inventory").transform.FindChild("Info").GetComponent<Text>().text = tempString;
 	}
 
@@ -56,42 +57,16 @@ public class InventoryScript : MonoBehaviour
 	{
 		GameObject tempObj = null;
 
-		Transform tempTransform = UISlotParent.FindChild(items[i].name);
+		Transform tempTransform = hotkeyBarParent.FindChild(items[i].name);
 		if (tempTransform != null)
 			tempObj = tempTransform.gameObject;
 
-		if (tempObj == null) {
-			AddUIElement(i);
-			return;
-		}
-	}
+		if (tempObj != null) {
+			tempObj.name = items[i].name;
 
-	private void AddUIElement(int i) {
-		UpdateUIInfoString();
-
-		GameObject tempObj;
-		tempObj = (GameObject)Instantiate(UISlotTemplate);
-		tempObj.SetActive(true);
-		tempObj.name = items[i].name;
-		tempObj.transform.SetParent(UISlotParent);
-
-		Sprite tempSprite = Resources.Load<Sprite>("UI Prefabs/" + items[i].name);
-		if (tempSprite != null)
-			tempObj.transform.GetChild(0).GetComponent<Image>().sprite = tempSprite;
-
-		RectTransform tempRT = UISlotParent.GetComponent<RectTransform>();
-		if (items.Count <= 12) {
-			tempRT.offsetMin = Vector2.zero;
-			tempRT.offsetMax = Vector2.zero;
-
-			//hide the scrollbar
-			UISlotParent.parent.parent.GetChild(2).gameObject.SetActive(false);
-		} else {
-			tempRT.offsetMin = new Vector2(0, -UISlotParent.GetComponent<GridLayoutGroup>().cellSize.y * (items.Count / 12));
-			tempRT.offsetMax = Vector2.zero;
-
-			//show the scrollbar
-			UISlotParent.parent.parent.GetChild(2).gameObject.SetActive(true);
+			Sprite tempSprite = Resources.Load<Sprite>("UI Prefabs/" + items[i].name);
+			if (tempSprite != null)
+				tempObj.transform.GetChild(0).GetComponent<Image>().sprite = tempSprite;
 		}
 	}
 
@@ -191,7 +166,7 @@ public class InventoryScript : MonoBehaviour
 		//adds the item to the list
 		items.Add(newItem);
 		UpdateUIInfoString();
-		AddUIElement(items.Count - 1);
+		UpdateUIElement(items.Count - 1);
 		return true;
 	}
 
@@ -287,7 +262,7 @@ public class InventoryScript : MonoBehaviour
 	{
 		try {
 			//destroys the ui element attached to the item
-			Destroy(UISlotParent.FindChild(i.name).gameObject);
+			Destroy(hotkeyBarParent.FindChild(i.name).gameObject);
 		}
 		//ui element was already destroyed
 		catch {}

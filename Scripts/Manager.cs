@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class Manager : MonoBehaviour
 {
-    private float prevInventoryButtonState;
     private float prevCharacterButtonState;
     private float prevPauseButtonState;
     private float prevQuestLogButtonState;
@@ -64,10 +63,6 @@ public class Manager : MonoBehaviour
             {
                 ChangeUIState("Character Info");
             }
-            else if (Input.GetAxisRaw("Inventory") == 1 && prevInventoryButtonState != 1)
-            {
-                ChangeUIState("Inventory");
-            }
             else if (Input.GetAxisRaw("Pause") == 1 && prevPauseButtonState != 1)
             {
                 ChangeUIState("Pause");
@@ -97,7 +92,7 @@ public class Manager : MonoBehaviour
             global.console.ToggleDevConsole();
         }
 
-        if (global.uicanvas.currentState.Equals(""))
+        if (global.uicanvas.currentState.Equals("Inventory"))
         {
             if (currInteraction != null)
             {
@@ -107,11 +102,6 @@ public class Manager : MonoBehaviour
                     ChangeUIState("Interaction");
             }
         }
-		else if (global.uicanvas.currentState.Equals("Inventory"))
-		{
-			if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
-				ChangeUIState("");
-		}
 
         if (global.uicanvas.currentState.Equals("") || global.uicanvas.currentState.Equals("Dialogue") ||
                 global.uicanvas.currentState.Equals("Interaction"))
@@ -121,7 +111,6 @@ public class Manager : MonoBehaviour
 
         prevF1ButtonState = Input.GetKeyDown(KeyCode.F1);
 		prevEscapeButtonState = Input.GetAxisRaw("Cancel");
-        prevInventoryButtonState = Input.GetAxisRaw("Inventory");
         prevCharacterButtonState = Input.GetAxisRaw("Character");
         prevPauseButtonState = Input.GetAxisRaw("Pause");
         prevQuestLogButtonState = Input.GetAxisRaw("Quest Log");
@@ -183,7 +172,7 @@ public class Manager : MonoBehaviour
         {
 			if (global.uicanvas.currentState.Equals("Interaction") || global.uicanvas.currentState.Equals("Dialogue") ||
 			    global.uicanvas.currentState.Equals("Fading") || global.uicanvas.currentState.Equals("Tutorial"))
-                global.uicanvas.ChangeState("");
+				global.uicanvas.ChangeState("");
 
             currInteraction = null;
         }
