@@ -298,15 +298,15 @@ class SavablePlayer
 [Serializable]
 public class SavableInventory
 {
-	private List<SavableItem> items;
+	private Item[] items;
 	private int money;
 	private int itemMax;
 	
-	public SavableInventory(List<Item> inventory)
+	public SavableInventory(Item[] inventory)
 	{
-		items = new List<SavableItem>();
-		for (int i = 0; i < inventory.Count; i++)
-			items.Add(new SavableItem(inventory[i]));
+		items = new Item[inventory.Length];
+		for (int i = 0; i < items.Length; i++)
+			items[i] = inventory[i];
 		money = global.playerInventory.money;
 		itemMax = global.playerInventory.maxNumOfItems;
 	}
@@ -317,9 +317,9 @@ public class SavableInventory
 			return;
 		}
 
-		global.playerInventory.items = new List<Item>();
-		for (int i = 0; i < items.Count; i++)
-			global.playerInventory.items.Add(items[i].Get());
+		global.playerInventory.items = new Item[5];
+		for (int i = 0; i < items.Length; i++)
+			global.playerInventory.items[i] = items[i];
 		global.playerInventory.money = money;
 		global.playerInventory.maxNumOfItems = itemMax;
 

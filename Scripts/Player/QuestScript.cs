@@ -609,7 +609,7 @@ public class Reward {
 			Item tempItem;
 			for(int i = 0; i < itemIDs.Length; i++) {
 				tempItem = global.itemDatabase.GetItem(itemIDs[i]);
-				global.playerInventory.AddItem(tempItem, tempItem.quantity);
+				global.playerInventory.AddItem(tempItem);
 				
 			}
 		}

@@ -135,9 +135,10 @@ public class Crop : ItemScript
 	public override void PickUp ()
 	{
 		//if the item gets added to the inventory
-		if (global.playerInventory.CanAddItem(this))
+		if (global.playerInventory.CanAddItem(GetItem()))
 		{
 			Item tempItem = global.itemDatabase.GetItem(transform.parent.name);
+			tempItem.quantity = Quantity;
 			if (currentPlot != null)
 			{
 				if (currentPlot.Harvest(tempItem.levelreq, fullyGrown))
@@ -148,7 +149,7 @@ public class Crop : ItemScript
 			{
 				global.gameManager.BroadcastActionCompleted("Pickup " + tempItem.name);
 			}
-			global.playerInventory.AddItem(tempItem, Quantity);
+			global.playerInventory.AddItem(tempItem);
 			Destroy(transform.parent.gameObject);
 		}
 	}

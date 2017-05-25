@@ -238,7 +238,9 @@ public class Manager : MonoBehaviour
                     try
                     {
 						string itemName = ReplaceCharWithSpaces(temp[2], '_');
-						global.playerInventory.AddItem(global.itemDatabase.GetItem(itemName), int.Parse(temp[3]));
+						Item itemToAdd = global.itemDatabase.GetItem(itemName);
+						itemToAdd.quantity = int.Parse(temp[3]);
+						global.playerInventory.AddItem(itemToAdd);
                     }
                     catch
                     {

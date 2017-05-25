@@ -6,9 +6,7 @@ using System.Collections.Generic;
 
 /* To Do:
  * 
- * shop UI: -resizing scroll area not working properly
- * 			-buy & sell qty selection
- * 					-only show when qty is >5
+ * Make container class to do this
  */
 
 public class ShopScript : MonoBehaviour
@@ -77,7 +75,7 @@ public class ShopScript : MonoBehaviour
 	public void DisplayBuyScreen()
 	{
 		DestroyScrollAreaChildren ();
-		InstantiateScrollAreaChildren (availableItems, true);
+		//InstantiateScrollAreaChildren (availableItems, true);
 		UpdateInfoText ();
 		currentScreen = ShopScreen.Buy;
 	}
@@ -85,19 +83,19 @@ public class ShopScript : MonoBehaviour
 	public void DisplaySellScreen()
 	{
 		DestroyScrollAreaChildren ();
-		InstantiateScrollAreaChildren (global.playerInventory.items, false);
+		//InstantiateScrollAreaChildren (global.playerInventory.items, false);
 		UpdateInfoText ();
 	}
 
 	public void DisplayBuyBackScreen()
 	{
 		DestroyScrollAreaChildren ();
-		InstantiateScrollAreaChildren (buyBackItems, true);
+		//InstantiateScrollAreaChildren (buyBackItems, true);
 		UpdateInfoText ();
 		currentScreen = ShopScreen.BuyBack;
 	}
 
-	private void InstantiateScrollAreaChildren(List<Item> itemList, bool buttonsForBuying)
+	private void InstantiateScrollAreaChildren(Item[] itemList, bool buttonsForBuying)
 	{
 		foreach(Item i in itemList)
 		{
@@ -191,7 +189,7 @@ public class ShopScript : MonoBehaviour
 			if (listToBuyFrom[i].name.Equals(uiObj.name))
 			{
 				//if the player is able to buy the item, then do stuff
-				if (global.playerInventory.BuyItem(listToBuyFrom[i], 1))
+				if (global.playerInventory.BuyItem(listToBuyFrom[i]))
 				{
 					if (listToBuyFrom[i].quantity <=0)
 					{

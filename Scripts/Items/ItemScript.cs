@@ -197,4 +197,13 @@ public class Item
 		temp.transform.SetParent (ItemScript.ItemParentInHierarchy);
 		return temp;
 	}
+
+	public bool Equals (Item obj)
+	{
+		if (id == obj.id) {
+			if (stolenFrom.Equals(obj.stolenFrom))
+				return true;
+		}
+		return false;
+	}
 }

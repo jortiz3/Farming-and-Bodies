@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.IO;
@@ -6,10 +6,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 
+//rename to playerinventory
+
 //create blank item
 //do not allow click panel on blank item
 //add item fills in empty slot
 //	--array instead of list? list for chests/containers?
+
+//add item methods
+//remove item
 
 public class InventoryScript : MonoBehaviour 
 {
@@ -18,7 +23,7 @@ public class InventoryScript : MonoBehaviour
 	//the transform for the right click menu
 	public static GameObject UIClickPanel;
 
-	public List<Item> items;
+	public Item[] items;
 	public GameObject[] equipped;
 	public int maxNumOfItems = 30;
 	public int money = 0;
@@ -32,7 +37,7 @@ public class InventoryScript : MonoBehaviour
 		UIClickPanel = GameObject.FindGameObjectWithTag("InvUIClickPanel");
 		UIClickPanel.SetActive (false);
 
-		items = new List<Item>();
+		items = new Item[maxNumOfItems];
 		equipped = new GameObject[4];
 		UpdateInventoryUI();
 	}
@@ -41,7 +46,7 @@ public class InventoryScript : MonoBehaviour
 	{
 		UpdateUIInfoString();
 
-		for (int i = 0; i < items.Count; i++)
+		for (int i = 0; i < items.Length; i++)
 		{
 			UpdateUIElement(i);
 		}
@@ -55,11 +60,10 @@ public class InventoryScript : MonoBehaviour
 
 	private void UpdateUIElement(int i)
 	{
-		GameObject tempObj = null;
+		if (i > items.Length)
+			return;
 
-		Transform tempTransform = hotkeyBarParent.FindChild(items[i].name);
-		if (tempTransform != null)
-			tempObj = tempTransform.gameObject;
+		GameObject tempObj = hotkeyBarParent.GetChild(i).gameObject;
 
 		if (tempObj != null) {
 			tempObj.name = items[i].name;
@@ -84,61 +88,57 @@ public class InventoryScript : MonoBehaviour
 	}
 
 	public bool HasItem(string itemName) {
-		for (int i = 0; i < items.Count; i++) {
-			if (items[i].name.Equals(itemName))
+		for (int i = 0; i < items.Length; i++) {
+			if (items[i] != null && items[i].name.Equals(itemName))
 				return true;
 		}
 		return false;
 	}
 
-	public bool CanAddItem(ItemScript iscript)
+	//redo
+	public bool CanAddItem(Item item)
 	{
-		Item itemToAdd = global.itemDatabase.GetItem(iscript.transform.parent.name);
-		for (int i = 0; i < items.Count; i++) {
-			if (itemToAdd.name.Equals(items[i].name) && itemToAdd.stolenFrom.Equals(items[i].stolenFrom)) {
+		for (int i = 0; i < items.Length; i++) {
+			if (items[i] == null) {
+				return true;
+			} else if (item.name.Equals(items[i].name) && item.stolenFrom.Equals(items[i].stolenFrom)) {
 				return true;
 			}
 		}
-
-		if (items.Count < maxNumOfItems)
-			return true;
 		return false;
 	}
 
 	public bool AddItem (ItemScript iscript) {
-		if (items.Count >= maxNumOfItems)
+		Item itemToAdd = iscript.GetItem ();
+		if (!CanAddItem(itemToAdd))
 			return false;
-		Item newItem = global.itemDatabase.GetItem(iscript.transform.parent.name);
-		newItem.quantity = iscript.Quantity;
-		return AddItem (newItem, newItem.quantity);
+		return AddItem (itemToAdd);
 	}
 
 	public bool AddItem(int DatabaseID, int Quantity) {
-		if (items.Count >= maxNumOfItems)
-			return false;
 		Item newItem = global.itemDatabase.GetItem(DatabaseID);
 		newItem.quantity = Quantity;
-		return AddItem(newItem, Quantity);
+		if (!CanAddItem(newItem))
+			return false;
+		return AddItem(newItem);
 	}
 
 	public bool AddItem(string itemName, int Quantity) {
-		if (items.Count >= maxNumOfItems)
-			return false;
 		Item newItem = global.itemDatabase.GetItem(itemName);
 		newItem.quantity = Quantity;
-		return AddItem(newItem, Quantity);
+		return AddItem(newItem);
 	}
 
-	public bool AddItem (Item itemToAdd, int quantity) {
-		if (items.Count >= maxNumOfItems) {
+	public bool AddItem (Item itemToAdd) {
+		if (!CanAddItem(itemToAdd)) {
 			global.console.AddMessage("Cannot pick up " + itemToAdd.name + ". You are already carrying " + maxNumOfItems + " items.");
 			return false;
 		}
-		for(int index = 0; index < items.Count; index++) {
+		for(int index = 0; index < items.Length; index++) {
 			//if the type of item is already in the list, add to the quantity, add to the weight and destroy the object outside of the inventory
 			if (items[index].name.Equals(itemToAdd.name) && items[index].suffix.Equals(itemToAdd.suffix)
 			    && items[index].stolenFrom.Equals(itemToAdd.stolenFrom)) {
-				items[index].quantity += quantity;
+				items[index].quantity += itemToAdd.quantity;
 
 				for (int i = 1; i <= items[index].quantity; i++)
 					global.gameManager.BroadcastActionCompleted("Get " + i + " " + items[index].name);
@@ -148,7 +148,7 @@ public class InventoryScript : MonoBehaviour
 						global.gameManager.BroadcastActionCompleted("Steal " + i + " " + items[index].name + " from " + items[index].stolenFrom);
 				}
 
-				itemToAdd.quantity -= quantity;
+				itemToAdd.quantity = 0;
 				UpdateUIInfoString();
 				UpdateUIElement(index);
 				return true;
@@ -157,16 +157,16 @@ public class InventoryScript : MonoBehaviour
 
 		Item newItem = new Item();
 		newItem.CopyValues(itemToAdd);
-		newItem.quantity = quantity;
-		itemToAdd.quantity -= quantity;
+		newItem.quantity = itemToAdd.quantity;
+		itemToAdd.quantity = 0;
 
 		for (int i = 1; i <= newItem.quantity; i++)
 			global.gameManager.BroadcastActionCompleted("Get " + i + " " + newItem.name);
 
 		//adds the item to the list
-		items.Add(newItem);
+		//items.Add(newItem);
 		UpdateUIInfoString();
-		UpdateUIElement(items.Count - 1);
+		//UpdateUIElement(items.Count - 1);
 		return true;
 	}
 
@@ -220,7 +220,7 @@ public class InventoryScript : MonoBehaviour
 
 
 	public void RemoveItem(string itemName, int quantity) {
-		for (int i = 0; i < items.Count; i++) {
+		for (int i = 0; i < items.Length; i++) {
 			if (items[i].name.Equals(itemName)) {
 				items[i].quantity--;
 				UpdateUIInfoString();
@@ -258,27 +258,34 @@ public class InventoryScript : MonoBehaviour
 		}
 	}
 
-	public void RemoveItem(Item i, bool spawnPrefab)
+	public void RemoveItem(Item item, bool spawnPrefab)
 	{
 		try {
 			//destroys the ui element attached to the item
-			Destroy(hotkeyBarParent.FindChild(i.name).gameObject);
+			Destroy(hotkeyBarParent.FindChild(item.name).gameObject);
 		}
 		//ui element was already destroyed
 		catch {}
 
 		//removes the item if it is currently equipped
-		if (equipped[0] != null && equipped [0].name.Equals (i.name))
+		if (equipped[0] != null && equipped [0].name.Equals (item.name))
 			Destroy(equipped[0]);
 
 		if (spawnPrefab) {
 			//drops the prefab in front of the player
-			GameObject temp = i.Instantiate();
+			GameObject temp = item.Instantiate();
 			temp.transform.position = global.playerObject.transform.position + global.playerObject.transform.forward * 3 + global.playerObject.transform.up * 2;
 		}
 
-		//removes the item from the list
-		items.Remove(i);
+		for (int i = 0; i < items.Length; i++) {
+			if (items[i] != null) {
+				if (items[i].name.Equals(item.name)) {
+					items[i] = null;
+					UpdateUIElement(i);
+					break;
+				}
+			}
+		}
 
 		UpdateInventoryUI();
 	}
@@ -296,10 +303,10 @@ public class InventoryScript : MonoBehaviour
 		return temp;
 	}
 
-	public bool BuyItem(Item itemToBuy, int quantity) {
+	public bool BuyItem(Item itemToBuy) {
 		if(money >= itemToBuy.value)
 		{
-			if (AddItem(itemToBuy, quantity))
+			if (AddItem(itemToBuy))
 			{
 				money -= itemToBuy.value;
 				global.gameManager.BroadcastMessage("Buy " + itemToBuy.name + itemToBuy.suffix);
@@ -338,7 +345,7 @@ public class InventoryScript : MonoBehaviour
 
 	private int FindIndex(string name) {
 		//finds the item in the list
-		for (int index = 0; index < items.Count; index++)
+		for (int index = 0; index < items.Length; index++)
 		{
 			if (name.Equals(items[index].name))
 			{
