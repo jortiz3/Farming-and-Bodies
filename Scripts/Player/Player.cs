@@ -19,9 +19,6 @@ public class Player : MonoBehaviour {
 
 	private Animator anim;
 
-	[HideInInspector]
-	public CharacterState _characterState;
-
 	//The max speed when walking
 	public float walkSpeed = 2.0f;
 	//The max speed when running
@@ -31,23 +28,14 @@ public class Player : MonoBehaviour {
 	//The speed at which the character turns
 	public float rotateSpeed = 50.0f;
 
+	private float currVelocityY;
+
 	public float walkMaxAnimationSpeed = 0.75f;
 	public float runMaxAnimationSpeed = 1.0f;
 
 	private Vector3 moveDirection = Vector3.zero;
 
-	[HideInInspector]
-	public bool jumpBool;
-
-	public enum CharacterState 
-	{
-		Idle = 0,
-		Walking = 1,
-		Running = 2,
-		Attacking = 3,
-		Harvesting = 4,
-		Jump = 5,
-	}
+	private bool jumpBool;
 	
 	void Start ()
 	{
@@ -94,80 +82,42 @@ public class Player : MonoBehaviour {
 		    global.uicanvas.currentState.Equals ("Character Info") || global.uicanvas.currentState.Equals ("Shop") || global.screenIsFading)
 		{
             anim.SetBool("IsAttack", false);
-            anim.SetBool("IsIdle", true);
             anim.SetBool("IsWalk", false);
             anim.SetBool("IsRun", false);
             anim.SetBool("IsJump", false);
+			anim.SetTrigger("IsIdle");
 			return;
 		}
 
-		#region animation stuff
-        //moving + sprint keys
-		if (Input.GetAxisRaw("Horizontal") != 0 && Input.GetAxisRaw("Sprint") != 0
-                 || Input.GetAxisRaw("Vertical") != 0 && Input.GetAxisRaw("Sprint") != 0
-                 || Input.GetAxisRaw("Vertical") != 0 && Input.GetAxisRaw("Horizontal") != 0
-                 && Input.GetAxisRaw("Sprint") != 0)
+		AnimatorStateInfo currAnimState = anim.GetCurrentAnimatorStateInfo (0);
+
+        if (Input.GetAxisRaw("Sprint") != 0 && (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0))
         {
-            _characterState = CharacterState.Walking;
+			if (!currAnimState.IsName("Walk"))
+				anim.SetTrigger("IsWalk");
         }
-        //pressing move keys
         else if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0)
         {
-            _characterState = CharacterState.Running;
+			if (!currAnimState.IsName("Run"))
+				anim.SetTrigger("IsRun");
         }
-		else
-			_characterState = CharacterState.Idle;
+		else {
+			if (!currAnimState.IsName("Idle"))
+				anim.SetTrigger("IsIdle");
+		}
 
 		if (Input.GetButtonDown("Jump") && jumpBool == false)
 		{
-			_characterState = CharacterState.Jump;
+			anim.SetTrigger("IsJump");
+			currVelocityY = 0.5f;
+			jumpBool = true;
 		}
-
-		if (_characterState == CharacterState.Jump)
-		{
-			anim.SetBool("IsAttack", false);
-			anim.SetBool("IsIdle", false);
-			anim.SetBool("IsWalk", false);
-			anim.SetBool("IsRun", false);
-			anim.SetBool("IsJump", true);
-			transform.Translate(Vector3.up * 150 * Time.deltaTime, Space.World);
-			jumpBool = true;			
-		}
-        else if (_characterState == CharacterState.Idle)
-        {
-            anim.SetBool("IsAttack", false);
-            anim.SetBool("IsIdle", true);
-            anim.SetBool("IsWalk", false);
-            anim.SetBool("IsRun", false);
-            anim.SetBool("IsJump", false);
-        }
-        else if (_characterState == CharacterState.Running)
-        {
-            anim.SetBool("IsAttack", false);
-            anim.SetBool("IsIdle", false);
-            anim.SetBool("IsWalk", false);
-            anim.SetBool("IsRun", true);
-            anim.SetBool("IsJump", false);
-        }
-        else if (_characterState == CharacterState.Harvesting)
-        {
-            anim.SetBool("IsHarvesting", true);
-        }
-        else
-        {
-            anim.SetBool("IsAttack", false);
-            anim.SetBool("IsIdle", false);
-            anim.SetBool("IsWalk", true);
-            anim.SetBool("IsRun", false);
-            anim.SetBool("IsJump", false);
-        }
-		#endregion
 
 		#region movement
 		Vector3 forward = Camera.main.transform.TransformDirection(Vector3.forward);
 		forward.y = 0;
 		forward = forward.normalized;
-		Vector3 right= new Vector3(forward.z, 0, -forward.x);
+		Vector3 right = new Vector3(forward.z, 0, -forward.x);
 		
 		float upDown = Input.GetAxisRaw("Vertical");
 		float leftRight = Input.GetAxisRaw("Horizontal");
@@ -178,11 +128,11 @@ public class Player : MonoBehaviour {
 		if (groundDirection != Vector3.zero)
 		{
 			float groundSpeed= Mathf.Min(groundDirection.magnitude, 1.0f);
-			if(_characterState == CharacterState.Running)
+			if(currAnimState.IsName("Run"))
 				groundSpeed *= runSpeed;
-			else if(_characterState == CharacterState.Walking)
+			else if(currAnimState.IsName("Walk"))
 				groundSpeed *= walkSpeed;
-			else if (_characterState == CharacterState.Idle)
+			else if (currAnimState.IsName("Idle"))
 			{
 				groundDirection = Vector3.zero;
 				groundSpeed = 0;
@@ -208,8 +158,10 @@ public class Player : MonoBehaviour {
 		Vector3 movement = moveDirection * moveSpeed;
 		movement *= Time.deltaTime;
 		if (!controller.isGrounded) {
-			movement.y -= 9.8f * Time.deltaTime;
-			jumpBool = true;
+			currVelocityY -= 2f * Time.deltaTime;
+			if (currVelocityY < -20f)
+				currVelocityY = -20f;
+			movement.y += currVelocityY;
 		} else {
 			jumpBool = false;
 		}
