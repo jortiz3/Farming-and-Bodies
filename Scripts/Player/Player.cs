@@ -58,7 +58,6 @@ public class Player : MonoBehaviour {
 
 		gameObject.name = "Player";
 		gameObject.tag = "Player";
-		GetComponent<InventoryScript>().Initialize();
 
 		global.Initialize();
 
@@ -183,7 +182,7 @@ public class Player : MonoBehaviour {
 	{
 		Skills = new Skill[]{ new Skill("Farming", 10), new Skill("Speech", 10) };
 
-		gameObject.GetComponent<InventoryScript> ().Initialize ();
+		//gameObject.GetComponent<InventoryScript> ().Initialize ();
 	}
 
 	private void UpdateCharacterInfo()

@@ -105,7 +105,7 @@ public class PlayerCamera : MonoBehaviour {
 				//reset the timer, set the control, and hide the cursor
 				control_timer = 0;
 				control_mouse = true;
-				Screen.showCursor = false;
+				Cursor.visible = false;
 
 				//euler = transform.eulerAngles;
 				//eulerAngles.x is 360-270 above horizon and 0-90 below, so we convert it to +- 0-90
@@ -142,7 +142,7 @@ public class PlayerCamera : MonoBehaviour {
 			{
 				//the right mouse button was just released
 				if (Input.GetMouseButtonUp(1))
-					Screen.showCursor = true;
+					Cursor.visible = true;
 				//the right mouse button is currently up
 				if (!Input.GetMouseButton(1))
 					control_timer += Time.deltaTime;

@@ -627,13 +627,13 @@ public class Manager : MonoBehaviour
                 return "Object not found. Command Format:  Place <object_name> <x,y,z>";
             try
             {
-				if (objectToPlace.GetComponent<NavMeshAgent>() != null)
-					objectToPlace.GetComponent<NavMeshAgent>().enabled = false;
+				if (objectToPlace.GetComponent<UnityEngine.AI.NavMeshAgent>() != null)
+					objectToPlace.GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = false;
                 string[] positionValues = temp[2].Split(',');
 				objectToPlace.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 				objectToPlace.transform.localPosition = new Vector3(float.Parse(positionValues[0]), float.Parse(positionValues[1]), float.Parse(positionValues[2]));
-				if (objectToPlace.GetComponent<NavMeshAgent>() != null)
-					objectToPlace.GetComponent<NavMeshAgent>().enabled = true;
+				if (objectToPlace.GetComponent<UnityEngine.AI.NavMeshAgent>() != null)
+					objectToPlace.GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = true;
             }
             catch
             {

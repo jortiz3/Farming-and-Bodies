@@ -49,7 +49,7 @@ public class Crop : ItemScript
 
 		//sets the color to the first color
 		color = 0;
-		objrend = transform.parent.renderer;
+		objrend = transform.parent.GetComponent<Renderer>();
 		objrend.material.color = colors[color];
 		previousColor = objrend.material.color;
 

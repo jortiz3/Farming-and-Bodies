@@ -23,8 +23,8 @@ public class NPCScript : MonoBehaviour
 	public CharacterState _characterState;
 
 	//Movement
-	NavMesh nMesh;
-	private NavMeshAgent nav;
+	UnityEngine.AI.NavMesh nMesh;
+	private UnityEngine.AI.NavMeshAgent nav;
 	private float pauseTime;
 	public float maxPauseTime;
 
@@ -65,9 +65,9 @@ public class NPCScript : MonoBehaviour
 	private bool recruited = false;
 	#endregion
 	void Start () {
-		nav = GetComponent<NavMeshAgent>();
+		nav = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
-		gameObject.AddComponent("EnemyFOV");
+		gameObject.AddComponent<EnemyFOV>();
 		enemyFOV = GetComponent<EnemyFOV>();
 
 		pauseTime = 0.0f;
@@ -126,8 +126,8 @@ public class NPCScript : MonoBehaviour
 	{
 		if(audioClip != null)
 		{
-			audio.clip = audioClip[clip];
-			audio.Play();
+			GetComponent<AudioSource>().clip = audioClip[clip];
+			GetComponent<AudioSource>().Play();
 		}
 	}
 
@@ -341,7 +341,7 @@ public class NPCScript : MonoBehaviour
 	{
 		Vector3 direction = t - transform.position;
 		Vector3 side = Quaternion.AngleAxis(90, Vector3.up) * direction;
-		NavMeshHit hit;
+		UnityEngine.AI.NavMeshHit hit;
 
 		//Keep the NPC from trying to go to a point outside of fence
 		side.x = Mathf.Clamp(transform.position.x, -121f, 121f);
@@ -351,7 +351,7 @@ public class NPCScript : MonoBehaviour
 			side.x *= -1;
 
 		//Detects if the point is located on the NavMesh
-		bool temp = NavMesh.SamplePosition(side, out hit, .5f, 1);
+		bool temp = UnityEngine.AI.NavMesh.SamplePosition(side, out hit, .5f, 1);
 		Debug.Log (temp);
 
 		Debug.Log ("Side: " + side);
