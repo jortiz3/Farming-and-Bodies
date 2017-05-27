@@ -7,6 +7,7 @@ public class Container : MonoBehaviour {
 
 	protected Transform UIParent;
 
+	protected int currency;
 	[SerializeField]
 	protected Item[] items;
 	[SerializeField]
@@ -15,6 +16,10 @@ public class Container : MonoBehaviour {
 	public int size { get { return items.Length; } }
 
 	void Start() {
+		Initialize ();
+	}
+
+	protected virtual void Initialize() {
 		if (UITemplate == null)
 			UITemplate = GameObject.FindGameObjectWithTag("ContainerTemplate");
 
@@ -30,6 +35,22 @@ public class Container : MonoBehaviour {
 
 	public virtual void UpdateContainerUI() {
 		//loops through children of uiparent to change values
+		for (int i = 0; i < items.Length; i++) {
+			if (items[i] != null) {
+				//edit container slot
+			}
+		}
+	}
+
+	public bool HasItem(Item item) {
+		for (int i = 0; i < items.Length; i++) {
+			if (items[i] != null) {
+				if (items[i].Equals(item)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public bool CanAddItem(Item item) {
@@ -68,16 +89,39 @@ public class Container : MonoBehaviour {
 		return false;
 	}
 
-	public void DropItem(Item item) {
+	public bool RemoveItem(Item item) {
 		for (int i = 0; i < items.Length; i++) {
 			if (items[i] != null) {
 				if (items[i].Equals(item)) {
-					//instantiate object
-					//remove from array
-					UpdateContainerUI();
-					return;
+					items[i] = null;
+					return true;
 				}
 			}
+		}
+		return false;
+	}
+
+	public void DropItem(Item item) {
+		if (RemoveItem (item)) {
+			//instantiate item to world space
+			UpdateContainerUI();
+		}
+	}
+
+	public bool BuyItem(Item item) {
+		int total = item.quantity * item.value;
+		if (currency >= total) {
+			if (AddItem(item)) { //if item successfully added
+				currency -= total; //update currency
+				return true; //return that we did buy item
+			}
+		}
+		return false; //unable to buy item
+	}
+	
+	public void SellItem(Item item) {
+		if (RemoveItem (item)) { //if we are able to remove the item
+			currency += item.quantity * item.value;//update currency -- item should still exist; only array pointer should be null
 		}
 	}
 }
