@@ -89,34 +89,42 @@ public class MenuScript : MonoBehaviour
 
 		public void SetCurrentItemSlot (GameObject uiObj)
 		{
-				global.playerInventory.SetCurrentItemSlot (uiObj);
-				InventoryScript.UIClickPanel.transform.position = Input.mousePosition;
+				Container.HighlightedItemInUI = uiObj.GetComponent<ItemScript> ().GetItem ();
+				if (Container.HighlightedItemInUI != null)
+						Container.HighlightedGameObjectInUI = uiObj;
 		}
 
 		public void ClearCurrentItemSlot ()
 		{
-				global.playerInventory.ClearCurrentItemSlot ();
+				Container.HighlightedItemInUI = null;
 		}
 
 		public void DisplayCurrentItemSlotInfo (GameObject infoObj)
 		{
-				Item temp = global.playerInventory.GetItem (InventoryScript.CurrentInvSlot);
-				if (temp != null) {
+				if (Container.HighlightedItemInUI != null) {
 						infoObj.SetActive (true);
-						infoObj.transform.Find ("Text").GetComponent<Text> ().text = temp.name + "\nVal: " + temp.value + "\nQty: " + temp.quantity;
-						infoObj.transform.position = InventoryScript.CurrentInvSlot.transform.position;
+						infoObj.transform.Find ("Text").GetComponent<Text> ().text = Container.HighlightedItemInUI.name + "\nVal: " + Container.HighlightedItemInUI.value + "\nQty: " + Container.HighlightedItemInUI.quantity;
+						infoObj.transform.position = Container.HighlightedGameObjectInUI.transform.position;
+				}
+		}
+
+		public void DisplayClickPanel (GameObject clickPanel)
+		{
+				if (Container.HighlightedItemInUI != null) {
+						clickPanel.transform.position = Container.HighlightedGameObjectInUI.transform.position;
+						clickPanel.SetActive (true);
 				}
 		}
 
 		public void UseCurrentItemSlot (GameObject clickPanel)
 		{
-				if (global.playerInventory.UseCurrentItemSlot ())
-						clickPanel.SetActive (false);
+				global.playerInventory.UseItem (Container.HighlightedItemInUI);
+				clickPanel.SetActive (false);
 		}
 
 		public void DropCurrentItemSlot ()
 		{
-				global.playerInventory.DropCurrentItemSlot ();
+				global.playerInventory.DropItem (Container.HighlightedItemInUI);
 		}
 
 		public void Save (int index)

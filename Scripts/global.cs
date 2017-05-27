@@ -8,7 +8,7 @@ public static class global
 {
 		public static Player playerScript;
 		public static GameObject playerObject;
-		//public static PlayerInventory playerInventory;
+		public static PlayerInventory playerInventory;
 		public static ItemDatabase itemDatabase;
 		public static QuestScript questDatabase;
 		public static MenuScript uicanvas;
@@ -22,7 +22,7 @@ public static class global
 		public static bool musicEnabled = true;
 		//public static bool soundEnabled;
 
-		public static float musicVolume = 0.5f;
+		public static float musicVolume = 0.1f;
 		//public static float soundVolume;
 
 		public static string previousScene;
@@ -33,7 +33,7 @@ public static class global
 		{
 				playerObject = GameObject.FindGameObjectWithTag ("Player");
 				playerScript = playerObject.GetComponent<Player> ();
-				playerInventory = playerObject.GetComponent<InventoryScript> ();
+				playerInventory = playerObject.GetComponent<PlayerInventory> ();
 
 				npcParentInHierarchy = GameObject.Find ("NPCs").transform;
 

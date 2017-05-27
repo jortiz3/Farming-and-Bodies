@@ -285,7 +285,7 @@ class SavablePlayer
 				quests = global.playerScript.questList;
 				onePersonHasBeenKilled = Player.atleastOnePersonKilled;
 				position = new SavableVector3 (global.playerScript.transform.position);
-				inventory = new SavableInventory (global.playerInventory.items);
+				inventory = new SavableInventory (global.playerInventory.GetItems());
 		}
 
 		public void Load ()
@@ -310,15 +310,13 @@ public class SavableInventory
 {
 		private Item[] items;
 		private int money;
-		private int itemMax;
 
 		public SavableInventory (Item[] inventory)
 		{
 				items = new Item[inventory.Length];
 				for (int i = 0; i < items.Length; i++)
 						items [i] = inventory [i];
-				money = global.playerInventory.money;
-				itemMax = global.playerInventory.maxNumOfItems;
+				money = global.playerInventory.storedCurrency;
 		}
 
 		public void Load ()
@@ -328,13 +326,10 @@ public class SavableInventory
 						return;
 				}
 
-				global.playerInventory.items = new Item[5];
-				for (int i = 0; i < items.Length; i++)
-						global.playerInventory.items [i] = items [i];
-				global.playerInventory.money = money;
-				global.playerInventory.maxNumOfItems = itemMax;
+				global.playerInventory.LoadItems(items);
+				global.playerInventory.storedCurrency = money;
 
-				global.playerInventory.UpdateInventoryUI ();
+				global.playerInventory.UpdateContainerUI ();
 		}
 }
 

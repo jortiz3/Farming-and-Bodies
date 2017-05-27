@@ -8,12 +8,6 @@ public class Body : ItemScript {
 
 	}
 
-	public override void PickUp ()
-	{
-		if (global.playerInventory.PickUpBodies(Quantity))
-			Destroy(transform.parent.parent.gameObject);
-	}
-
 	public override void OnPlayerTriggerEnter()
 	{
 		canInteract = true;

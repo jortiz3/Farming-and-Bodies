@@ -106,7 +106,7 @@ public class QuestScript : MonoBehaviour
 				// the size we want is bigger than the default size, then we adjust it
 				if (currentDesiredHeight > global.questDatabase.templateParent.parent.GetComponent<RectTransform> ().rect.max.y) {
 						int bottom = currentDesiredHeight
-						          - (int)(global.questDatabase.templateParent.parent.GetComponent<RectTransform> ().rect.height);
+						             - (int)(global.questDatabase.templateParent.parent.GetComponent<RectTransform> ().rect.height);
 						global.questDatabase.templateParent.GetComponent<RectTransform> ().offsetMin = new Vector2 (0, -bottom);
 						global.questDatabase.templateParent.GetComponent<RectTransform> ().offsetMax = new Vector2 (0, 0);
 				} else {
@@ -178,7 +178,7 @@ public class QuestScript : MonoBehaviour
 										if (player.questList [q].objectives [o].ActionsNeeded [a].GetAction ().Equals (ActionCompleted)) {
 												//if we are currently on the branch that is needed to complete this action
 												if (player.questList [q].objectives [o].ActionsNeeded [a].RequiredBranch.Equals ("") ||
-												player.questList [q].objectives [o].ActionsNeeded [a].RequiredBranch.Equals (player.questList [q].currentBranch)) {
+												    player.questList [q].objectives [o].ActionsNeeded [a].RequiredBranch.Equals (player.questList [q].currentBranch)) {
 														//it was matched, so mark this action as completed -- but the current objective isn't necessarily fulfilled yet
 														player.questList [q].objectives [o].ActionsNeeded [a].Complete ();
 														//if the objective we are checking is in fact the current objective for the player and it is indeed completed
@@ -597,15 +597,18 @@ public class Reward
 		public string branchForReward;
 		public int[] itemIDs;
 		public int money;
-		public int bodies;
+		public int bodies; //remove at some point
 		public float[] experience;
 		public string followUpQuestName;
 		public string[] eventsToFire;
 
 		public void GiveRewards ()
 		{
-				global.playerInventory.AddMoney (money);
-				global.playerInventory.PickUpBodies (bodies);
+				global.playerInventory.storedCurrency += money;
+
+				for (int b = 0; b < bodies; b++)
+						global.playerInventory.AddItem (global.itemDatabase.GetItem ("Body"));
+				
 				global.playerScript.AddQuest (followUpQuestName);
 
 				for (int e = 0; e < experience.Length; e++) {

@@ -3,11 +3,12 @@ using System.Collections;
 
 public class Container : MonoBehaviour
 {
-
 		public static GameObject UITemplate;
 
-		public static GameObject HighlightedItemInUI;
+		public static Item HighlightedItemInUI;
+		public static GameObject HighlightedGameObjectInUI;
 
+		[SerializeField]
 		protected Transform UIParent;
 
 		protected int currency;
@@ -17,6 +18,7 @@ public class Container : MonoBehaviour
 		private int maxNumOfItems;
 
 		public int size { get { return items.Length; } }
+		public int storedCurrency { get { return currency; } set { currency = value; } }
 
 		void Start ()
 		{
@@ -158,5 +160,27 @@ public class Container : MonoBehaviour
 								}
 						}
 				}
+		}
+
+		public Item GetItem(Item item) {
+				Item temp = null;
+				for (int i = 0; i < items.Length; i++) {
+						if (items [i] != null) {
+								if (items [i].Equals (item)) {
+										temp = new Item ();
+										temp.CopyValues(items [i]);
+										break;
+								}
+						}
+				}
+				return temp;
+		}
+
+		public Item[] GetItems() {
+				return (Item[])items.Clone ();
+		}
+
+		public void LoadItems(Item[] items) {
+				this.items = (Item[])items.Clone();
 		}
 }
