@@ -5,6 +5,7 @@ public class Container : MonoBehaviour
 {
 		public static GameObject UITemplate;
 
+		public static Container displayedContainer;
 		public static Item HighlightedItemInUI;
 		public static GameObject HighlightedGameObjectInUI;
 
@@ -30,9 +31,11 @@ public class Container : MonoBehaviour
 				if (UITemplate == null)
 						UITemplate = GameObject.FindGameObjectWithTag ("ContainerTemplate");
 
-				UIParent = Instantiate (UITemplate).transform;
-				while (UIParent.childCount < maxNumOfItems) {
-						Instantiate (UIParent.GetChild (0), UIParent);
+				if (UIParent == null) {
+						UIParent = Instantiate (UITemplate).transform;
+						while (UIParent.childCount < maxNumOfItems) {
+								Instantiate (UIParent.GetChild (0), UIParent);
+						}
 				}
 
 				items = new Item[maxNumOfItems];
