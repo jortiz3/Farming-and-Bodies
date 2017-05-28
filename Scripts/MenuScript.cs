@@ -22,8 +22,6 @@ public class MenuScript : MonoBehaviour
 
 		[HideInInspector]
 		public Dialogue currentDialogue;
-		[HideInInspector]
-		public ShopScript currentShop;
 
 		private CanvasGroup[] groups;
 
@@ -37,46 +35,6 @@ public class MenuScript : MonoBehaviour
 				ChangeState (startState);
 		}
 
-		#region shop
-
-		public void SetShop (ShopScript s)
-		{
-				currentShop = s;
-				ChangeState ("Shop");
-		}
-
-		public void DisplayShopBuyScreen ()
-		{
-				if (currentShop != null)
-						currentShop.DisplayBuyScreen ();
-		}
-
-		public void DisplayShopSellScreen ()
-		{
-				if (currentShop != null)
-						currentShop.DisplaySellScreen ();
-		}
-
-		public void DisplayShopBuyBackScreen ()
-		{
-				if (currentShop != null)
-						currentShop.DisplayBuyBackScreen ();
-		}
-
-		public void BuyShopItem (GameObject uiObj)
-		{
-				if (currentShop != null)
-						currentShop.BuyItem (uiObj);
-		}
-
-		public void SellItemToShop (GameObject uiObj)
-		{
-				if (currentShop != null)
-						currentShop.SellItem (uiObj);
-		}
-
-		#endregion
-
 		public void SetDialogue (Dialogue d)
 		{
 				currentDialogue = d;
@@ -89,42 +47,44 @@ public class MenuScript : MonoBehaviour
 
 		public void SetCurrentItemSlot (GameObject uiObj)
 		{
-				Container.HighlightedItemInUI = uiObj.GetComponent<ItemScript> ().GetItem ();
-				if (Container.HighlightedItemInUI != null)
+				Item HighlightedItemInUI = uiObj.GetComponent<ItemScript> ().GetItem ();
+
+				if (HighlightedItemInUI != null)
 						Container.HighlightedGameObjectInUI = uiObj;
 		}
 
 		public void ClearCurrentItemSlot ()
 		{
-				Container.HighlightedItemInUI = null;
+				Container.HighlightedGameObjectInUI = null;
 		}
 
 		public void DisplayCurrentItemSlotInfo (GameObject infoObj)
 		{
-				if (Container.HighlightedItemInUI != null) {
+				if (Container.HighlightedGameObjectInUI != null) {
+						Item UIItem = Container.HighlightedGameObjectInUI.GetComponent<ItemScript> ().GetItem ();
 						infoObj.SetActive (true);
-						infoObj.transform.Find ("Text").GetComponent<Text> ().text = Container.HighlightedItemInUI.name + "\nVal: " + Container.HighlightedItemInUI.value + "\nQty: " + Container.HighlightedItemInUI.quantity;
+						infoObj.transform.Find ("Text").GetComponent<Text> ().text = UIItem.name + "\nVal: " + UIItem.value + "\nQty: " + UIItem.quantity;
 						infoObj.transform.position = Container.HighlightedGameObjectInUI.transform.position;
 				}
 		}
 
 		public void DisplayClickPanel (GameObject clickPanel)
 		{
-				if (Container.HighlightedItemInUI != null) {
-						clickPanel.transform.position = Container.HighlightedGameObjectInUI.transform.position;
+				if (Container.HighlightedGameObjectInUI != null) {
 						clickPanel.SetActive (true);
+						clickPanel.transform.position = Container.HighlightedGameObjectInUI.transform.position;
 				}
 		}
 
 		public void UseCurrentItemSlot (GameObject clickPanel)
 		{
-				global.playerInventory.UseItem (Container.HighlightedItemInUI);
+				global.playerInventory.UseItem (Container.HighlightedGameObjectInUI.GetComponent<ItemScript> ().GetItem ());
 				clickPanel.SetActive (false);
 		}
 
 		public void DropCurrentItemSlot ()
 		{
-				global.playerInventory.DropItem (Container.HighlightedItemInUI);
+				global.playerInventory.DropItem (Container.HighlightedGameObjectInUI.GetComponent<ItemScript> ().GetItem ());
 		}
 
 		public void Save (int index)

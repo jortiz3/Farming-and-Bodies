@@ -9,7 +9,7 @@ using System.Collections.Generic;
  * Make container class to do this
  */
 
-public class ShopScript : MonoBehaviour
+public class ShopScriptDepricated : MonoBehaviour
 {
 		enum ShopScreen
 		{
@@ -53,7 +53,7 @@ Buy,
 						StartCoroutine ("RefreshStock");
 						refreshCycleStarted = true;
 				}
-				global.uicanvas.SetShop (this);
+				//global.uicanvas.SetShop (this);
 				DisplayBuyScreen ();
 		}
 

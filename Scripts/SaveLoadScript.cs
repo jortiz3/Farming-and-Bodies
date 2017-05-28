@@ -329,7 +329,7 @@ public class SavableInventory
 				global.playerInventory.LoadItems(items);
 				global.playerInventory.storedCurrency = money;
 
-				global.playerInventory.UpdateContainerUI ();
+				global.playerInventory.UpdateContainer ();
 		}
 }
 

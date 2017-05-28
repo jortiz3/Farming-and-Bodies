@@ -62,11 +62,11 @@ public class Manager : MonoBehaviour
 								ChangeUIState ("Quest Log");
 						} else if (Input.GetAxisRaw ("Cancel") == 1 && prevEscapeButtonState != 1) {
 								if (global.uicanvas.currentState.Equals ("") || global.uicanvas.currentState.Equals ("Interaction") ||
-								            global.uicanvas.currentState.Equals ("Tutorial"))
+								    global.uicanvas.currentState.Equals ("Tutorial"))
 										ChangeUIState ("Pause");
 								else if (global.uicanvas.currentState.Equals ("Dialogue")) {
 										if (currInteraction == null ||
-										currInteraction.GetComponent<Dialogue> () != null && currInteraction.GetComponent<Dialogue> ().canFreelyExit)
+										    currInteraction.GetComponent<Dialogue> () != null && currInteraction.GetComponent<Dialogue> ().canFreelyExit)
 												ChangeUIState ("");
 								} else
 										ChangeUIState ("");
@@ -87,7 +87,7 @@ public class Manager : MonoBehaviour
 				}
 
 				if (global.uicanvas.currentState.Equals ("") || global.uicanvas.currentState.Equals ("Dialogue") ||
-				        global.uicanvas.currentState.Equals ("Interaction"))
+				    global.uicanvas.currentState.Equals ("Interaction"))
 						Time.timeScale = 1;
 				else
 						Time.timeScale = 0;
@@ -152,7 +152,7 @@ public class Manager : MonoBehaviour
 						return;
 				if (currInteraction.Equals (obj)) {
 						if (global.uicanvas.currentState.Equals ("Interaction") || global.uicanvas.currentState.Equals ("Dialogue") ||
-						 global.uicanvas.currentState.Equals ("Fading") || global.uicanvas.currentState.Equals ("Tutorial"))
+						    global.uicanvas.currentState.Equals ("Fading") || global.uicanvas.currentState.Equals ("Tutorial"))
 								global.uicanvas.ChangeState ("");
 
 						currInteraction = null;
@@ -225,7 +225,7 @@ public class Manager : MonoBehaviour
             //Give Bodies <qty>
             else if (temp [1].Equals ("Bodies") || temp [1].Equals ("bodies")) {
 								try {
-										Item itemToAdd = global.itemDatabase.GetItem("Body");
+										Item itemToAdd = global.itemDatabase.GetItem ("Body");
 										itemToAdd.quantity = int.Parse (temp [2]);
 										global.playerInventory.AddItem (itemToAdd);
 								} catch {
@@ -291,11 +291,11 @@ public class Manager : MonoBehaviour
 								}
 						}
 				} else if (temp [0].Equals ("Open") || temp [0].Equals ("open")) {
-						//Open Shop <npcName>
-						if (temp [1].Equals ("Shop") || temp [1].Equals ("shop")) {
+						//Open Container <npcName>
+						if (temp [1].Equals ("Container") || temp [1].Equals ("container")) {
 								try {
-										string objectName = ReplaceCharWithSpaces (temp [2], '_');
-										GameObject.Find (objectName).transform.FindChild ("Interaction").GetComponent<ShopScript> ().OpenShopScreen ();
+										//string objectName = ReplaceCharWithSpaces (temp [2], '_');
+										//GameObject.Find (objectName).transform.FindChild ("Interaction").GetComponent<Container> ();
 								} catch {
 										return "Could not parse. Command Format: Open Shop <npc_name>";
 								}

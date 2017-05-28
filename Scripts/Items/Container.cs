@@ -5,15 +5,13 @@ public class Container : MonoBehaviour
 {
 		public static GameObject UITemplate;
 
-		public static Container displayedContainer;
-		public static Item HighlightedItemInUI;
+		public static Container displayedContainer; //used for buying/selling/organizing
 		public static GameObject HighlightedGameObjectInUI;
 
 		[SerializeField]
 		protected Transform UIParent;
 
 		protected int currency;
-		[SerializeField]
 		protected Item[] items;
 		[SerializeField]
 		private int maxNumOfItems;
@@ -28,8 +26,10 @@ public class Container : MonoBehaviour
 
 		protected virtual void Initialize ()
 		{
-				if (UITemplate == null)
+				if (UITemplate == null) {
 						UITemplate = GameObject.FindGameObjectWithTag ("ContainerTemplate");
+						UITemplate.SetActive (false);
+				}
 
 				if (UIParent == null) {
 						UIParent = Instantiate (UITemplate).transform;
@@ -39,9 +39,11 @@ public class Container : MonoBehaviour
 				}
 
 				items = new Item[maxNumOfItems];
+
+				UpdateContainer ();
 		}
 
-		public virtual void UpdateContainerUI ()
+		public virtual void UpdateContainer ()
 		{
 				//loops through children of uiparent to change values
 				for (int i = 0; i < items.Length; i++) {
@@ -91,14 +93,14 @@ public class Container : MonoBehaviour
 										global.gameManager.BroadcastActionCompleted("Get " + q + " " + items[i].name + items[i].suffix);
 								}
 
-								UpdateContainerUI ();
+								UpdateContainer ();
 								return true;
 						}
 				}
 
 				if (emptyIndex < items.Length) {
 						items [emptyIndex] = item;
-						UpdateContainerUI ();
+						UpdateContainer ();
 						return true;
 				}
 				return false;
@@ -122,7 +124,7 @@ public class Container : MonoBehaviour
 				if (RemoveItem (item)) {
 						//instantiate item to world space
 						global.gameManager.BroadcastMessage("Drop " + item.name + item.suffix);
-						UpdateContainerUI ();
+						UpdateContainer ();
 				}
 		}
 
@@ -158,7 +160,7 @@ public class Container : MonoBehaviour
 												items [i] = null;
 										}
 
-										UpdateContainerUI ();
+										UpdateContainer ();
 										return;
 								}
 						}
@@ -185,5 +187,6 @@ public class Container : MonoBehaviour
 
 		public void LoadItems(Item[] items) {
 				this.items = (Item[])items.Clone();
+				UpdateContainer ();
 		}
 }
