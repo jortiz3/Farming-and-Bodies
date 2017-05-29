@@ -38,6 +38,9 @@ public class Container : MonoBehaviour
 
 				if (UIParent == null) {
 						UIParent = Instantiate (UITemplate).transform; //container template
+						UIParent.SetParent(global.uicanvas.transform);//set canvas as the parent
+						UIParent.gameObject.SetActive(true);//make sure object is active
+
 						UIParent.name = "Container UI - " + gameObject.name; //rename template
 
 						string containerTitle = "";
@@ -179,8 +182,10 @@ public class Container : MonoBehaviour
 		public void DropItem (Item item)
 		{
 				if (RemoveItem (item)) {
-						//instantiate item to world space
-						global.gameManager.BroadcastMessage("Drop " + item.name + item.suffix);
+						GameObject temp = item.Instantiate ();
+						temp.transform.position = global.playerObject.transform.position + global.playerObject.transform.forward * 3 + global.playerObject.transform.up * 2;
+
+						global.gameManager.BroadcastActionCompleted("Drop " + item.name + item.suffix);
 						UpdateContainer ();
 				}
 		}

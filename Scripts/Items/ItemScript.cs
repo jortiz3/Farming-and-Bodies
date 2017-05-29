@@ -191,6 +191,7 @@ public class Item
 				GameObject temp = MonoBehaviour.Instantiate (prefab) as GameObject;
 				temp.name = name;
 				temp.transform.SetParent (ItemScript.ItemParentInHierarchy);
+				temp.GetComponent<ItemScript> ().Quantity = quantity;
 				return temp;
 		}
 

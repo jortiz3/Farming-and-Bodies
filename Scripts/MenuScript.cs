@@ -53,11 +53,6 @@ public class MenuScript : MonoBehaviour
 						Container.HighlightedGameObjectInUI = uiObj;
 		}
 
-		public void ClearCurrentItemSlot ()
-		{
-				Container.HighlightedGameObjectInUI = null;
-		}
-
 		public void DisplayCurrentItemSlotInfo (GameObject infoObj)
 		{
 				if (Container.HighlightedGameObjectInUI != null) {
@@ -78,13 +73,17 @@ public class MenuScript : MonoBehaviour
 
 		public void UseCurrentItemSlot (GameObject clickPanel)
 		{
-				global.playerInventory.UseItem (Container.HighlightedGameObjectInUI.GetComponent<ItemScript> ().GetItem ());
+				Item currItem = Container.HighlightedGameObjectInUI.GetComponent<ItemScript> ().GetItem ();
+				global.playerInventory.UseItem (currItem);
+				if (global.playerInventory.HasItem(currItem))
+						Container.HighlightedGameObjectInUI = null;
 				clickPanel.SetActive (false);
 		}
 
 		public void DropCurrentItemSlot ()
 		{
 				global.playerInventory.DropItem (Container.HighlightedGameObjectInUI.GetComponent<ItemScript> ().GetItem ());
+				Container.HighlightedGameObjectInUI = null;
 		}
 
 		public void Save (int index)
