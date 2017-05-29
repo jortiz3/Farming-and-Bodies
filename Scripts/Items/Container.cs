@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Container : MonoBehaviour
 {
@@ -15,6 +17,9 @@ public class Container : MonoBehaviour
 		protected Item[] items;
 		[SerializeField]
 		private int maxNumOfItems;
+
+		[SerializeField]
+		private string[] possibleContents;
 
 		public int size { get { return items.Length; } }
 		public int storedCurrency { get { return currency; } set { currency = value; } }
@@ -32,24 +37,76 @@ public class Container : MonoBehaviour
 				}
 
 				if (UIParent == null) {
-						UIParent = Instantiate (UITemplate).transform;
-						while (UIParent.childCount < maxNumOfItems) {
+						UIParent = Instantiate (UITemplate).transform; //container template
+						UIParent.name = "Container UI - " + gameObject.name; //rename template
+
+						string containerTitle = "";
+
+						if (transform.GetComponent<NPCScript> () != null)
+								containerTitle = gameObject.name + "'s Inventory";
+						else
+								containerTitle = gameObject.name;
+
+						UIParent.FindChild("Text").GetComponent<Text>().text = containerTitle; //change the displayed title
+
+						UIParent = UIParent.GetChild (3); //set item parent
+
+						while (UIParent.childCount < maxNumOfItems) { //make sure we have enough slots displayed
 								Instantiate (UIParent.GetChild (0), UIParent);
 						}
 				}
 
 				items = new Item[maxNumOfItems];
 
+				GenerateContents ();
+
 				UpdateContainer ();
+		}
+
+		private void GenerateContents() {
+				if (possibleContents != null && possibleContents.Length > 0) {
+
+						int randomVal;
+
+						List<string> remainingPossibilites = new List<string> ();
+						remainingPossibilites.AddRange (possibleContents);
+
+						for (int i = 0; i < items.Length; i++) {
+								randomVal = Random.Range (-remainingPossibilites.Count, remainingPossibilites.Count - 1);
+
+								if (randomVal > 0) {
+										items [i] = global.itemDatabase.GetItem (remainingPossibilites[randomVal]);
+										remainingPossibilites.RemoveAt (randomVal);
+								}
+						}
+				}
 		}
 
 		public virtual void UpdateContainer ()
 		{
-				//loops through children of uiparent to change values
+				GameObject currContainerSlot;
+				Image spriteImage;
+				Sprite currSprite;
 				for (int i = 0; i < items.Length; i++) {
+						currContainerSlot = UIParent.GetChild (i).GetChild (0).gameObject;
+						spriteImage = currContainerSlot.GetComponent<Image> ();
+
 						if (items [i] != null) {
-								//edit container slot
+								spriteImage.transform.parent.name = items [i].name;
+								currContainerSlot.GetComponent<ItemScript> ().Quantity = items [i].quantity;
+								currSprite = Resources.Load<Sprite> ("UI Prefabs/" + items [i].name);
+						} else {
+								spriteImage.transform.parent.name = "empty slot";
+								currSprite = null;
 						}
+
+
+						spriteImage.sprite = currSprite;
+
+						if (currSprite != null)
+								spriteImage.color = Color.white;
+						else
+								spriteImage.color = Color.clear;
 				}
 		}
 
