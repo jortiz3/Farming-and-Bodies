@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
+//make Tutorial an overlay, remove complimentary state
+
 public class MenuScript : MonoBehaviour
 {
 

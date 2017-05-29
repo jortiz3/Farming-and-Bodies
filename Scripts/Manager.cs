@@ -291,11 +291,13 @@ public class Manager : MonoBehaviour
 								}
 						}
 				} else if (temp [0].Equals ("Open") || temp [0].Equals ("open")) {
-						//Open Container <npcName>
+						//Open Container <object_name>
 						if (temp [1].Equals ("Container") || temp [1].Equals ("container")) {
 								try {
-										//string objectName = ReplaceCharWithSpaces (temp [2], '_');
-										//GameObject.Find (objectName).transform.FindChild ("Interaction").GetComponent<Container> ();
+										string objectName = ReplaceCharWithSpaces (temp [2], '_');
+										objectName = "Container " + objectName;
+										global.uicanvas.ChangeState(objectName);
+										//if npc, behave like dialogue
 								} catch {
 										return "Could not parse. Command Format: Open Shop <npc_name>";
 								}

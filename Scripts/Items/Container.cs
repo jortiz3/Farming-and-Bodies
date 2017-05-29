@@ -41,7 +41,7 @@ public class Container : MonoBehaviour
 						UIParent.SetParent(global.uicanvas.transform);//set canvas as the parent
 						UIParent.gameObject.SetActive(true);//make sure object is active
 
-						UIParent.name = "Container UI - " + gameObject.name; //rename template
+						UIParent.name = "Container " + gameObject.name; //rename template
 
 						string containerTitle = "";
 
